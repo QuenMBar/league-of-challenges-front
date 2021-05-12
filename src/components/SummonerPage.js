@@ -49,6 +49,17 @@ export default class SummonerPage extends Component {
             });
     };
 
+    deleteChallenge = (id) => {
+        fetch(`http://localhost:3000/created_challenges/${id}`, {
+            method: "DELETE",
+        })
+            .then((data) => data.json())
+            .then((deleteData) => {
+                console.log(deleteData);
+                this.getChallengesInfo();
+            });
+    };
+
     componentWillUnmount() {
         this.unlisten();
     }
@@ -63,6 +74,7 @@ export default class SummonerPage extends Component {
                     refresh={this.getChallengesInfo}
                     newChallenge={this.getNewChallenges}
                     allChallenges={this.state.allChallengesData}
+                    deleteChallenge={this.deleteChallenge}
                 />
             </Paper>
         );
