@@ -1,7 +1,8 @@
-import { Accordion, AccordionSummary, Button, Typography, AccordionDetails } from "@material-ui/core";
+import { Accordion, AccordionSummary, Button, Typography, AccordionDetails, IconButton } from "@material-ui/core";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -10,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
     heading: {
         fontSize: theme.typography.pxToRem(15),
         fontWeight: theme.typography.fontWeightRegular,
+    },
+    iconButton: {
+        padding: 10,
     },
 }));
 
@@ -25,14 +29,25 @@ export default function ChallengeContainer(props) {
                 Refresh
             </Button>
             {props.allChallenges.map((data, i) => (
-                <Accordion>
+                <Accordion key={data.id}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
                         <Typography className={classes.heading}>Challenge {i}</Typography>
+                        <IconButton
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                props.deleteChallenge(data.id);
+                            }}
+                            className={classes.iconButton}
+                            aria-label="delete"
+                        >
+                            <DeleteForeverIcon />
+                        </IconButton>
                     </AccordionSummary>
+
                     <AccordionDetails>
                         <Typography>{JSON.stringify(data)}</Typography>
                     </AccordionDetails>
