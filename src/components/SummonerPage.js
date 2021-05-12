@@ -31,17 +31,32 @@ export default class SummonerPage extends Component {
     };
 
     getChallengesInfo = () => {
-        fetch(`http://localhost:3000/summoners/${this.state.userData.name}/all_challenges`)
-            .then((data) => data.json())
-            .then((challengeData) => {
-                this.setState({
-                    allChallengesData: challengeData,
+        fetch(`http://localhost:3000/created_challenges/${this.state.userData.name}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(() => {
+            fetch(`http://localhost:3000/created_challenges/${this.state.userData.name}`)
+                .then((data) => data.json())
+                .then((challengeData) => {
+                    this.setState({
+                        allChallengesData: challengeData,
+                    });
                 });
-            });
+        });
     };
 
     getNewChallenges = () => {
-        fetch(`http://localhost:3000/summoners/${this.state.userData.name}/new_challenges`)
+        fetch(`http://localhost:3000/created_challenges`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                summoner: this.state.userData.name,
+            }),
+        })
             .then((data) => data.json())
             .then((challengeData) => {
                 console.log(challengeData);
