@@ -1,17 +1,7 @@
-import {
-    Accordion,
-    AccordionSummary,
-    Button,
-    Typography,
-    AccordionDetails,
-    IconButton,
-    GridList,
-    List,
-} from "@material-ui/core";
-import React, { useState, useEffect } from "react";
+import { Typography, List } from "@material-ui/core";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+
 import { Fragment } from "react";
 import ChallengeAccordion from "./ChallengeAccordion";
 
@@ -46,7 +36,7 @@ export default function ChallengeContainer(props) {
             ) : null}
             <List className={classes.list}>
                 {props.allChallenges.map((data, i) => (
-                    <ChallengeAccordion key={data.id} data={data} i={i} />
+                    <ChallengeAccordion key={data.id} data={data} i={i} deleteChallenge={props.deleteChallenge} />
                 ))}
             </List>
         </Fragment>
