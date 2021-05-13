@@ -1,8 +1,19 @@
-import { Accordion, AccordionSummary, Button, Typography, AccordionDetails, IconButton } from "@material-ui/core";
-import React from "react";
+import {
+    Accordion,
+    AccordionSummary,
+    Button,
+    Typography,
+    AccordionDetails,
+    IconButton,
+    GridList,
+    List,
+} from "@material-ui/core";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import { Fragment } from "react";
+import ChallengeAccordion from "./ChallengeAccordion";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -15,44 +26,29 @@ const useStyles = makeStyles((theme) => ({
     iconButton: {
         padding: 10,
     },
+    list: {
+        // maxHeight: "calc(100vh - 90px - 220px)",
+        // height: "calc(100vh - 90px - 220px)",
+        maxHeight: "100%",
+        overflow: "auto",
+        padding: 10,
+    },
+    challenge: {},
 }));
 
 export default function ChallengeContainer(props) {
     const classes = useStyles();
 
     return (
-        <div>
-            <Button onClick={props.newChallenge} variant="contained" color="primary">
-                New Challenge
-            </Button>
-            <Button onClick={props.refresh} variant="contained" color="secondary">
-                Refresh
-            </Button>
-            {props.allChallenges.map((data, i) => (
-                <Accordion key={data.id}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                    >
-                        <Typography className={classes.heading}>Challenge {i}</Typography>
-                        <IconButton
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                props.deleteChallenge(data.id);
-                            }}
-                            className={classes.iconButton}
-                            aria-label="delete"
-                        >
-                            <DeleteForeverIcon />
-                        </IconButton>
-                    </AccordionSummary>
-
-                    <AccordionDetails>
-                        <Typography>{JSON.stringify(data)}</Typography>
-                    </AccordionDetails>
-                </Accordion>
-            ))}
-        </div>
+        <Fragment>
+            {props.allChallenges.length === 0 ? (
+                <Typography className={classes.heading}>User has no challenges yet</Typography>
+            ) : null}
+            <List className={classes.list}>
+                {props.allChallenges.map((data, i) => (
+                    <ChallengeAccordion key={data.id} data={data} i={i} />
+                ))}
+            </List>
+        </Fragment>
     );
 }
