@@ -125,7 +125,9 @@ class SummonerPage extends Component {
         return (
             <div className={classes.root}>
                 <div className={classes.userInfo}>
-                    <RankContainer />
+                    <RankContainer 
+                        data={this.state.userData}
+                    />
                     <SummonerContainer
                         data={this.state.userData}
                         refresh={this.getChallengesInfo}
