@@ -39,8 +39,47 @@ const useStyles = makeStyles((theme) => ({
 export default function ChallengeAccordion(props) {
     const classes = useStyles();
     const [queue, setQueue] = useState({});
+    const [expanded, setExpanded] = React.useState(false);
+    const [challengeString, setChallengeString] = React.useState("");
+
+    const handleChange = () => {
+        setExpanded(!expanded);
+    };
 
     useEffect(() => {
+        let request = props.data.challenge.text;
+        if (request.includes("<summoner_spell>")) {
+            fetch(`http://localhost:3000/summoner_spells/${props.data.summoner_spell}`)
+                .then((resp) => resp.json())
+                .then((data) => {
+                    setChallengeString(request.replace("<summoner_spell>", data.name));
+                });
+        } else if (request.includes("<champion_spell>")) {
+            let championSpell = "";
+            switch (Number.parseInt(props.data.champion_spell)) {
+                case 1:
+                    championSpell = props.data.champion.spell_1_name;
+                    break;
+                case 2:
+                    championSpell = props.data.champion.spell_2_name;
+                    break;
+                case 3:
+                    championSpell = props.data.champion.spell_3_name;
+                    break;
+                case 4:
+                    championSpell = props.data.champion.spell_4_name;
+                    break;
+                default:
+                    championSpell = "unknown";
+                    break;
+            }
+            setChallengeString(request.replace("<champion_spell>", championSpell));
+        } else {
+            setChallengeString(request);
+        }
+        if (!props.data.attempted) {
+            setExpanded(true);
+        }
         fetch(`http://localhost:3000/league_queues/${props.data.map_id}`)
             .then((resp) => resp.json())
             .then((data) => setQueue(data));
@@ -76,7 +115,7 @@ export default function ChallengeAccordion(props) {
     let timeAgo = timeSince(new Date(JSON.parse(props.data.participants_json).gameStartTime));
 
     return (
-        <Accordion className={classes.challenge}>
+        <Accordion expanded={expanded} onChange={handleChange} className={classes.challenge}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
                 <div>
                     <Typography className={classes.heading}>{queue.description}</Typography>
@@ -89,7 +128,14 @@ export default function ChallengeAccordion(props) {
                     </Typography>
                     {/* <br /> */}
                     <Typography className={classes.heading}>
-                        Challenge Completed: {props.data.challenge_succeeded}
+                        {props.data.challenge_succeeded !== null ? (
+                            <Fragment>Challenge Completed: {props.data.challenge_succeeded.toString()} </Fragment>
+                        ) : null}
+                    </Typography>
+                </div>
+                <div className={classes.div2}>
+                    <Typography className={classes.heading}>
+                        Challenge: {props.data.challenge.name.toString()}
                     </Typography>
                 </div>
                 <IconButton
@@ -105,7 +151,11 @@ export default function ChallengeAccordion(props) {
             </AccordionSummary>
 
             <AccordionDetails>
-                <Typography>{JSON.stringify(props.data.challenge_status)}</Typography>
+                {props.data.attempted ? (
+                    <Typography>{JSON.stringify(props.data.challenge_status)}</Typography>
+                ) : (
+                    <Typography>{challengeString}</Typography>
+                )}
             </AccordionDetails>
         </Accordion>
     );

@@ -48,6 +48,7 @@ const refreshTheme = createMuiTheme({
 
 export default function SummonerContainer(props) {
     const classes = useStyles();
+
     return (
         <Paper className={classes.root}>
             <div className={classes.imgDiv}>
