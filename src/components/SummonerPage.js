@@ -80,6 +80,7 @@ class SummonerPage extends Component {
                 .then((data) => data.json())
                 .then((challengeData) => {
                     if (Array.isArray(challengeData)) {
+                        console.log(challengeData);
                         this.setState({
                             allChallengesData: challengeData,
                         });
