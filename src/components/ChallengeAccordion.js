@@ -68,7 +68,7 @@ export default function ChallengeAccordion(props) {
 
         let request = props.data.challenge.text;
         if (request.includes("<summoner_spell>")) {
-            fetch(`http://localhost:3000/summoner_spells/${props.data.summoner_spell}`)
+            fetch(`https://loc-backend.herokuapp.com/summoner_spells/${props.data.summoner_spell}`)
                 .then((resp) => resp.json())
                 .then((data) => {
                     setChallengeString(request.replace("<summoner_spell>", data.name));
@@ -99,7 +99,7 @@ export default function ChallengeAccordion(props) {
         if (!props.data.attempted) {
             setExpanded(true);
         }
-        fetch(`http://localhost:3000/league_queues/${props.data.map_id}`)
+        fetch(`https://loc-backend.herokuapp.com/league_queues/${props.data.map_id}`)
             .then((resp) => resp.json())
             .then((data) => setQueue(data));
     }, []);

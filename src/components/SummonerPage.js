@@ -56,7 +56,7 @@ class SummonerPage extends Component {
     }
 
     getSummonerInfo = (name) => {
-        fetch(`http://localhost:3000/summoners/${name}`)
+        fetch(`https://loc-backend.herokuapp.com/summoners/${name}`)
             .then((data) => data.json())
             .then((summonerData) => {
                 this.setState(
@@ -69,7 +69,7 @@ class SummonerPage extends Component {
     };
 
     getJustSummonerInfo = () => {
-        fetch(`http://localhost:3000/summoners/${this.state.userData.name}`)
+        fetch(`https://loc-backend.herokuapp.com/summoners/${this.state.userData.name}`)
             .then((data) => data.json())
             .then((summonerData) => {
                 this.setState({
@@ -79,7 +79,7 @@ class SummonerPage extends Component {
     };
 
     getChallengesInfo = () => {
-        fetch(`http://localhost:3000/created_challenges/${this.state.userData.name}`)
+        fetch(`https://loc-backend.herokuapp.com/created_challenges/${this.state.userData.name}`)
             .then((data) => data.json())
             .then((challengeData) => {
                 if (Array.isArray(challengeData)) {
@@ -95,7 +95,7 @@ class SummonerPage extends Component {
     };
 
     getNewChallenges = () => {
-        fetch(`http://localhost:3000/created_challenges`, {
+        fetch(`https://loc-backend.herokuapp.com/created_challenges`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -112,7 +112,7 @@ class SummonerPage extends Component {
     };
 
     deleteChallenge = (id) => {
-        fetch(`http://localhost:3000/created_challenges/${id}`, {
+        fetch(`https://loc-backend.herokuapp.com/created_challenges/${id}`, {
             method: "DELETE",
         })
             .then((data) => data.json())
@@ -123,7 +123,7 @@ class SummonerPage extends Component {
     };
 
     updateNote = (note, id) => {
-        fetch(`http://localhost:3000/created_challenges/${id}`, {
+        fetch(`https://loc-backend.herokuapp.com/created_challenges/${id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
