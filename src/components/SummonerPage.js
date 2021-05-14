@@ -1,6 +1,5 @@
 import { Paper } from "@material-ui/core";
 import React, { Component } from "react";
-import { Fragment } from "react";
 import ChallengeContainer from "./ChallengeContainer";
 import RankContainer from "./RankContainer";
 import SummonerContainer from "./SummonerContainer";
@@ -69,6 +68,16 @@ class SummonerPage extends Component {
             });
     };
 
+    getJustSummonerInfo = () => {
+        fetch(`http://localhost:3000/summoners/${this.state.userData.name}`)
+            .then((data) => data.json())
+            .then((summonerData) => {
+                this.setState({
+                    userData: summonerData,
+                });
+            });
+    };
+
     getChallengesInfo = () => {
         fetch(`http://localhost:3000/created_challenges/${this.state.userData.name}`, {
             method: "PATCH",
@@ -81,9 +90,12 @@ class SummonerPage extends Component {
                 .then((challengeData) => {
                     if (Array.isArray(challengeData)) {
                         console.log(challengeData);
-                        this.setState({
-                            allChallengesData: challengeData,
-                        });
+                        this.setState(
+                            {
+                                allChallengesData: challengeData,
+                            },
+                            this.getJustSummonerInfo
+                        );
                     }
                 });
         });
@@ -126,9 +138,7 @@ class SummonerPage extends Component {
         return (
             <div className={classes.root}>
                 <div className={classes.userInfo}>
-                    <RankContainer 
-                        data={this.state.userData}
-                    />
+                    <RankContainer data={this.state.userData} />
                     <SummonerContainer
                         data={this.state.userData}
                         refresh={this.getChallengesInfo}
