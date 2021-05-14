@@ -124,7 +124,7 @@ export default function LeaderBoardContainer(props) {
     const [leaders, setLeaders] = useState([]);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/created_challenges`)
+        fetch(`http://localhost:3000/summoners`)
             .then((resp) => resp.json())
             .then((data) => setLeaders(data));
     }, []);

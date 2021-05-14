@@ -1,4 +1,14 @@
-import { Accordion, AccordionSummary, Typography, AccordionDetails, IconButton } from "@material-ui/core";
+import {
+    Accordion,
+    AccordionSummary,
+    Typography,
+    AccordionDetails,
+    IconButton,
+    TextField,
+    Divider,
+    AccordionActions,
+    Button,
+} from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -25,6 +35,19 @@ const useStyles = makeStyles((theme) => ({
     div2: {
         paddingLeft: 8,
     },
+    textfeild: {
+        width: "80%",
+        marginRight: "15%",
+    },
+    detailsDiv: {
+        width: "100%",
+    },
+    typeDiv: {
+        textAlign: "left",
+        width: "100%",
+        marginLeft: "5%",
+        marginRight: "5%",
+    },
 }));
 
 export default function ChallengeAccordion(props) {
@@ -32,12 +55,17 @@ export default function ChallengeAccordion(props) {
     const [queue, setQueue] = useState({});
     const [expanded, setExpanded] = React.useState(false);
     const [challengeString, setChallengeString] = React.useState("");
+    const [notes, setNotes] = React.useState("");
 
     const handleChange = () => {
         setExpanded(!expanded);
     };
 
     useEffect(() => {
+        if (props.data.notes !== null) {
+            setNotes(props.data.notes);
+        }
+
         let request = props.data.challenge.text;
         if (request.includes("<summoner_spell>")) {
             fetch(`http://localhost:3000/summoner_spells/${props.data.summoner_spell}`)
@@ -142,12 +170,36 @@ export default function ChallengeAccordion(props) {
             </AccordionSummary>
 
             <AccordionDetails>
-                {props.data.attempted ? (
-                    <Typography>{JSON.stringify(props.data.challenge_status)}</Typography>
-                ) : (
-                    <Typography>{challengeString}</Typography>
-                )}
+                <div className={classes.detailsDiv}>
+                    <div className={classes.typeDiv}>
+                        <Typography>Challenge: {challengeString}</Typography>
+                        {props.data.attempted ? <Typography>Result: {props.data.challenge_status}</Typography> : null}
+                    </div>
+
+                    <br />
+                    <TextField
+                        id="notes"
+                        label="notes"
+                        placeholder="Add Notes Here"
+                        multiline
+                        variant="outlined"
+                        className={classes.textfeild}
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                    />
+                </div>
             </AccordionDetails>
+            <Divider />
+            <AccordionActions>
+                <Button
+                    size="small"
+                    color="primary"
+                    variant="contained"
+                    onClick={() => props.updateNote(notes, props.data.id)}
+                >
+                    Save
+                </Button>
+            </AccordionActions>
         </Accordion>
     );
 }
