@@ -23,7 +23,9 @@ const useStyles = makeStyles((theme) => ({
         overflow: "auto",
         padding: 10,
     },
-    challenge: {},
+    accordion: {
+        width: "97%",
+    },
 }));
 
 export default function ChallengeContainer(props) {
@@ -35,9 +37,17 @@ export default function ChallengeContainer(props) {
                 <Typography className={classes.heading}>User has no challenges yet</Typography>
             ) : null}
             <List className={classes.list}>
-                {props.allChallenges.map((data, i) => (
-                    <ChallengeAccordion key={data.id} data={data} i={i} deleteChallenge={props.deleteChallenge} />
-                ))}
+                <div className={classes.accordion}>
+                    {props.allChallenges.map((data, i) => (
+                        <ChallengeAccordion
+                            key={data.id}
+                            data={data}
+                            i={i}
+                            updateNote={props.updateNote}
+                            deleteChallenge={props.deleteChallenge}
+                        />
+                    ))}
+                </div>
             </List>
         </Fragment>
     );

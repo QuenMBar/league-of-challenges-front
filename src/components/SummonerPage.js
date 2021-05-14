@@ -79,26 +79,19 @@ class SummonerPage extends Component {
     };
 
     getChallengesInfo = () => {
-        fetch(`http://localhost:3000/created_challenges/${this.state.userData.name}`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }).then(() => {
-            fetch(`http://localhost:3000/created_challenges/${this.state.userData.name}`)
-                .then((data) => data.json())
-                .then((challengeData) => {
-                    if (Array.isArray(challengeData)) {
-                        console.log(challengeData);
-                        this.setState(
-                            {
-                                allChallengesData: challengeData,
-                            },
-                            this.getJustSummonerInfo
-                        );
-                    }
-                });
-        });
+        fetch(`http://localhost:3000/created_challenges/${this.state.userData.name}`)
+            .then((data) => data.json())
+            .then((challengeData) => {
+                if (Array.isArray(challengeData)) {
+                    console.log(challengeData);
+                    this.setState(
+                        {
+                            allChallengesData: challengeData,
+                        },
+                        this.getJustSummonerInfo
+                    );
+                }
+            });
     };
 
     getNewChallenges = () => {
@@ -129,6 +122,22 @@ class SummonerPage extends Component {
             });
     };
 
+    updateNote = (note, id) => {
+        fetch(`http://localhost:3000/created_challenges/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                notes: note,
+            }),
+        })
+            .then((data) => data.json())
+            .then((noteData) => {
+                console.log(noteData);
+            });
+    };
+
     componentWillUnmount() {
         this.unlisten();
     }
@@ -150,6 +159,7 @@ class SummonerPage extends Component {
 
                 <Paper className={classes.challengeDiv}>
                     <ChallengeContainer
+                        updateNote={this.updateNote}
                         refresh={this.getChallengesInfo}
                         newChallenge={this.getNewChallenges}
                         allChallenges={this.state.allChallengesData}
